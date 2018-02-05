@@ -1,11 +1,6 @@
 **todo**
 
-- bootstrap layout 
-    - left bar:
-        - users online on same doc (col-3)
-    - right bar:
-        - Toolbar
-        - Textarea
+**TECH**
 - backend on firebase
     - each doc will have its own collection
     - save as html in db
@@ -27,3 +22,13 @@
 - Host
     - Github
     - Firebase
+
+**UI**
+- bootstrap layout 
+    - left bar:
+        - users online on same doc (col-3)
+    - right bar:
+        - Toolbar
+        - Textarea
+- Fontawesome icons
+
