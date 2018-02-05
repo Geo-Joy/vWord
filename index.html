@@ -7,14 +7,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   </head>
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link href="./assets/css/index.css" rel="stylesheet">
   <body>
       
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script> -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-  </body>
+        
+
+        <nav class="navbar navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="#">vWord</a>
+
+                <div class="navbar-header pull-right">
+                    <ul class="nav navbar-nav pull-left">
+                        <li>
+                            <i class="fas fa-share-alt"style="color:white"></i>
+                        </li>
+                    </ul>
+                </div>     
+            </div>            
+        </nav>
+        <br/>
+        <div class="container">
+            <div class="row">
+                <div class="col-3">
+                         <p>users online</p>
+                </div>
+                <div class="col-9" id="notebook">
+                        <div class="row">
+                            <div class="custom-control-inline">
+                                <!-- font size -->
+                                <select class="custom-select">
+                                    <option data-command='8' value="8" selected>8</option>
+                                    <option data-command='9' value="9" selected>9</option>
+                                    <option data-command='10' value="10" selected>10</option>
+                                    <option data-command='11' value="11" selected>11</option>
+                                    <option data-command='12' value="12" selected>12</option>
+                                    <option data-command='13' value="13" selected>13</option>
+                                    <option data-command='14' value="14" selected>14</option>
+                                </select>
+                                <!-- google fonts api 
+                                    https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBibp6byi27_Q1h5odJ6WyIRyKEZIRQAK8
+                                -->
+                                <select class="custom-select" id="googleFonts"></select>
+
+                                &nbsp;&nbsp;
+                                <!-- emboss -->
+                                <a href="#" data-command='bold'><button type="button" class="btn btn-light"><i class='fa fa-bold'></i></button></a>
+                                <a href="#" data-command='italic'><button type="button" class="btn btn-light"><i class='fa fa-italic'></i></button></a>
+                                <a href="#" data-command='underline'><button type="button" class="btn btn-light"><i class='fa fa-underline'></i></button></a>
+                                <div class="divider"></div>
+                                <a href="#" data-command='strikeThrough'><button type="button" class="btn btn-light"><i class='fa fa-strikethrough'></i></button></a>
+                                &nbsp;&nbsp;
+                                <!-- align -->
+                                <a href="#" data-command='justifyLeft'><button type="button" class="btn btn-light"><i class='fa fa-align-left'></i></button></a>
+                                <a href="#" data-command='justifyCenter'><button type="button" class="btn btn-light"><i class='fa fa-align-center'></i></button></a>
+                                <a href="#" data-command='alignRight'><button type="button" class="btn btn-light"><i class='fa fa-align-right'></i></button></a>
+                                <a href="#" data-command='alignJustify'><button type="button" class="btn btn-light"><i class='fa fa-align-justify'></i></button></a>
+                                <a href="#" data-command='alignJustify'><button type="button" class="btn btn-light"><i class='fa fa-align-justify'></i></button></a>
+                                &nbsp;&nbsp;
+                                <!-- list -->
+                                <a href="#" data-command='unOrderedList'><button type="button" class="btn btn-light"><i class='fa fa-list-ul'></i></button></a>
+                                <a href="#" data-command='orderedList'><button type="button" class="btn btn-light"><i class='fa fa-list-ol'></i></button></a>
+                                &nbsp;&nbsp;
+                                <!-- link -->
+                                <a href="#" data-command='urlLink'><button type="button" class="btn btn-light"><i class='fa fa-link'></i></button></a>
+                                <a href="#" data-command='urlUnlink'><button type="button" class="btn btn-light"><i class='fa fa-unlink'></i></button></a>
+                                &nbsp;&nbsp;
+                                <!-- multimedia -->
+                                <a href="#" data-command='imageUpload'><button type="button" class="btn btn-light"><i class='fa fa-image'></i></button></a>
+                                <a href="#" data-command='videoUpload'><button type="button" class="btn btn-light"><i class='fa fa-video'></i></button></a>
+                                <a href="#" data-command='audioUpload'><button type="button" class="btn btn-light"><i class='fa fa-music'></i></button></a>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="column-border" id="editor" contenteditable>
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+       
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function() {
+                $.getJSON("https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBibp6byi27_Q1h5odJ6WyIRyKEZIRQAK8", function(obj) {
+                    $.each(obj.items, function(key, value) {
+                        $("#googleFonts").append("<option data-command='fontFamily' data-value="+obj.items[key].family+">" + obj.items[key].family + "</option>");
+                    });
+                });
+            });
+
+            // functionality for the notebook
+            $('#notebook a').click(function(e) {
+                var command = $(this).data('command');
+                // alert(command);
+                document.execCommand($(this).data('command'), false, null);
+            });
+        </script>
+    </body>
 </html>

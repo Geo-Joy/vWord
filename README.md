@@ -4,6 +4,8 @@
 - backend on firebase
     - each doc will have its own collection
     - save as html in db
+    - USERS
+        - 
 - Toolbar features
     - Font selector (google fonts)
     - Font bold, italic, underline
@@ -13,7 +15,8 @@
     - Numbered list
     - Bullet list
     - Text alignment
-    - Insert image, video, audio
+    - Insert uploaded image, video, audio
+    - other features from [MOZ DEV](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand)
 
 
 - Collaboration
