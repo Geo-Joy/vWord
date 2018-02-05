@@ -37,8 +37,12 @@
                 <div class="col-9" id="notebook">
                         <div class="row">
                             <div class="custom-control-inline">
+                                <!-- undo redo -->
+                                <a href="#" data-command='undo'><button type="button" class="btn btn-light"><i class='fa fa-undo'></i></button></a>
+                                <a href="#" data-command='redo'><button type="button" class="btn btn-light"><i class='fa fa-redo'></i></button></a>
+
                                 <!-- font size -->
-                                <select class="custom-select">
+                                <select id="vfontSize" class="custom-select">
                                     <option data-command='8' value="8" selected>8</option>
                                     <option data-command='9' value="9" selected>9</option>
                                     <option data-command='10' value="10" selected>10</option>
@@ -51,6 +55,9 @@
                                     https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBibp6byi27_Q1h5odJ6WyIRyKEZIRQAK8
                                 -->
                                 <select class="custom-select" id="googleFonts"></select>
+                                <!-- font increase or decrease -->
+                                <a href="#" data-command='decreaseFontSize'><button type="button" class="btn btn-light"><i class='fa fa-font fa-sm'></i></button></a>
+                                <a href="#" data-command='increaseFontSize'><button type="button" class="btn btn-light"><i class='fa fa-font'></i></button></a>
 
                                 &nbsp;&nbsp;
                                 <!-- emboss -->
@@ -60,21 +67,30 @@
                                 <div class="divider"></div>
                                 <a href="#" data-command='strikeThrough'><button type="button" class="btn btn-light"><i class='fa fa-strikethrough'></i></button></a>
                                 &nbsp;&nbsp;
+                                
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="custom-control-inline">
                                 <!-- align -->
                                 <a href="#" data-command='justifyLeft'><button type="button" class="btn btn-light"><i class='fa fa-align-left'></i></button></a>
                                 <a href="#" data-command='justifyCenter'><button type="button" class="btn btn-light"><i class='fa fa-align-center'></i></button></a>
-                                <a href="#" data-command='alignRight'><button type="button" class="btn btn-light"><i class='fa fa-align-right'></i></button></a>
-                                <a href="#" data-command='alignJustify'><button type="button" class="btn btn-light"><i class='fa fa-align-justify'></i></button></a>
-                                <a href="#" data-command='alignJustify'><button type="button" class="btn btn-light"><i class='fa fa-align-justify'></i></button></a>
+                                <a href="#" data-command='justifyRight'><button type="button" class="btn btn-light"><i class='fa fa-align-right'></i></button></a>
+                                <a href="#" data-command='justifyFull'><button type="button" class="btn btn-light"><i class='fa fa-align-justify'></i></button></a>
                                 &nbsp;&nbsp;
                                 <!-- list -->
-                                <a href="#" data-command='unOrderedList'><button type="button" class="btn btn-light"><i class='fa fa-list-ul'></i></button></a>
-                                <a href="#" data-command='orderedList'><button type="button" class="btn btn-light"><i class='fa fa-list-ol'></i></button></a>
+                                <a href="#" data-command='insertUnorderedList'><button type="button" class="btn btn-light"><i class='fa fa-list-ul'></i></button></a>
+                                <a href="#" data-command='insertOrderedList'><button type="button" class="btn btn-light"><i class='fa fa-list-ol'></i></button></a>
                                 &nbsp;&nbsp;
                                 <!-- link -->
-                                <a href="#" data-command='urlLink'><button type="button" class="btn btn-light"><i class='fa fa-link'></i></button></a>
-                                <a href="#" data-command='urlUnlink'><button type="button" class="btn btn-light"><i class='fa fa-unlink'></i></button></a>
-                                &nbsp;&nbsp;
+                                <a href="#" data-command='createLink'><button type="button" class="btn btn-light"><i class='fa fa-link'></i></button></a>
+                                <a href="#" data-command='unlink'><button type="button" class="btn btn-light"><i class='fa fa-unlink'></i></button></a>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="custom-control-inline">
                                 <!-- multimedia -->
                                 <a href="#" data-command='imageUpload'><button type="button" class="btn btn-light"><i class='fa fa-image'></i></button></a>
                                 <a href="#" data-command='videoUpload'><button type="button" class="btn btn-light"><i class='fa fa-video'></i></button></a>
@@ -99,7 +115,7 @@
             $(document).ready(function() {
                 $.getJSON("https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBibp6byi27_Q1h5odJ6WyIRyKEZIRQAK8", function(obj) {
                     $.each(obj.items, function(key, value) {
-                        $("#googleFonts").append("<option data-command='fontFamily' data-value="+obj.items[key].family+">" + obj.items[key].family + "</option>");
+                        $("#googleFonts").append("<option data-value="+obj.items[key].family+">" + obj.items[key].family + "</option>");
                     });
                 });
             });
@@ -107,9 +123,24 @@
             // functionality for the notebook
             $('#notebook a').click(function(e) {
                 var command = $(this).data('command');
-                // alert(command);
-                document.execCommand($(this).data('command'), false, null);
+
+                if ( command == 'createLink' ) {
+                    url = prompt('Enter the link here: ', 'http:\/\/');
+                    document.execCommand(command, false, url);
+                }
             });
+
+            $('#googleFonts').change(function(){
+                var command = "fontName";
+                var fontName = $(this).val();
+                document.execCommand(command, false, fontName);
+            })
+
+            $('#vfontSize').change(function(){
+                var command = "fontSize";
+                var fontSize = $(this).val();
+                document.execCommand(command, false, fontSize);
+            })
         </script>
     </body>
 </html>
