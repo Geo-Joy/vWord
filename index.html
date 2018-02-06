@@ -11,10 +11,8 @@
   </head>
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
     <link href="./assets/css/index.css" rel="stylesheet">
-  <body>
-      
-        
 
+  <body onload="init()">
         <nav class="navbar navbar-dark bg-primary">
             <div class="container">
                 <a class="navbar-brand" href="#">vWord</a>
@@ -99,7 +97,7 @@
                         </div>
                         <br/>
                         <div class="row">
-                            <div class="column-border" id="editor" contenteditable>
+                            <div class="column-border full-width-div" id="editor" contenteditable>
                                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                             </div>
                         </div>
@@ -109,10 +107,13 @@
 
        
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- <script src="assets/js/jquery.caret.min.js"></script> -->
+    <script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script>
             $(document).ready(function() {
+                
                 $.getJSON("https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBibp6byi27_Q1h5odJ6WyIRyKEZIRQAK8", function(obj) {
                     $.each(obj.items, function(key, value) {
                         $("#googleFonts").append("<option data-value="+obj.items[key].family+">" + obj.items[key].family + "</option>");
@@ -121,28 +122,156 @@
             });
 
             // functionality for the notebook
-            $('#notebook a').click(function(e) {
+            $('#notebook a').click(function(event) {
                 var command = $(this).data('command');
 
                 if ( command == 'createLink' ) {
                     url = prompt('Enter the link here: ', 'http:\/\/');
                     document.execCommand(command, false, url);
+                    writeNotebookData()
                 }else{
                     document.execCommand(command, false, "");
                 }
+                event.preventDefault();
             });
 
-            $('#googleFonts').change(function(){
+            $('#googleFonts').change(function(event) {
                 var command = "fontName";
                 var fontName = $(this).val();
                 document.execCommand(command, false, fontName);
+                event.preventDefault();
             })
 
-            $('#vfontSize').change(function(){
+            $('#vfontSize').change(function(event) {
                 var command = "fontSize";
                 var fontSize = $(this).val();
                 document.execCommand(command, false, fontSize);
+                event.preventDefault();
             })
+
+            // trigger changes in notebook
+            $("#editor").on('DOMSubtreeModified', function() {
+                // do something after the div content has changed
+                
+
+                writeNotebookData();
+            
+                // console.log("hi");
+             
+            });
+
+            $("#editor").on('keydown keyup mousedown mouseup',function(e){
+                caretPosN = window.getSelection().anchorOffset;
+                console.log(caretPosN);
+                localStorage.setItem("caretPosN", caretPosN);
+            });
+
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyDVWtyitB-hHh8qesUaOP0Q6gOB9dExm4g",
+                authDomain: "vword-33ea9.firebaseapp.com",
+                databaseURL: "https://vword-33ea9.firebaseio.com",
+                projectId: "vword-33ea9",
+                storageBucket: "vword-33ea9.appspot.com",
+                messagingSenderId: "483246867957"
+            };
+            firebase.initializeApp(config);
+
+            function init() {
+
+
+
+                var firepadRef = getDbRef();
+
+                function getDbRef() {
+                    var ref = firebase.database().ref();
+                    var hash = window.location.hash.replace(/#/g, '');
+                    // var hash = window.location.hash.substring(1);
+                    console.log(hash);
+                    if (hash) {
+                        ref = ref.child(hash);
+                        readNotebookDataOnce(hash);
+                    } else {
+                        ref = ref.push();
+                        window.location = window.location + '#' + ref.key;
+                    }
+                    console.log('Firebase data: ', ref.toString());
+                    return ref;
+                }
+
+            };
+
+            function writeNotebookData() {
+                var hash = window.location.hash.substring(1);
+                var docHtml = $("#editor").html()
+                if(docHtml != ""){
+                    console.log("1");
+                    return firebase.database().ref(hash).update({
+                        docHTML: docHtml
+                    });
+                }
+            }
+
+            function readNotebookDataOnce(hash){
+                console.log(hash);
+                return firebase.database().ref(hash).once('value', function(snapshot) {
+                   
+                    console.log(hash);
+                    console.log(snapshot.val());
+                    if(snapshot.val() != null){
+                        $('#editor').html(snapshot.val().docHTML);
+                    }
+                    streamNotebookData(hash)
+                });
+                
+            }
+            function streamNotebookData(hash){
+                caretPosN = localStorage.getItem("caretPosN")
+                console.log(hash);
+                console.log(caretPosN);
+                return firebase.database().ref(hash).on('value', function(snapshot) {
+                   
+                    console.log(hash);
+                    console.log(snapshot.val());
+                    if(snapshot.val() != null){
+                        $('#editor').html(snapshot.val().docHTML);
+                        
+                    }
+                    // setCaretPosition('editor', caretPosN);
+                });
+            }
+
+            function preventDefault (e) {
+                if (e.preventDefault) { e.preventDefault(); }
+            }
+
+            function stopPropagation (e) {
+                if (e.stopPropagation) { e.stopPropagation(); }
+            }
+
+            function stopEvent (e) {
+                preventDefault(e);
+                stopPropagation(e);
+            }
+            // function getTextNodeAtPosition(root, index){
+            //     var lastNode = null;
+            
+            //     var treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT,function next(elem) {
+            //         if(index > elem.textContent.length){
+            //             index -= elem.textContent.length;
+            //             lastNode = elem;
+            //             return NodeFilter.FILTER_REJECT
+            //         }
+            //         return NodeFilter.FILTER_ACCEPT;
+            //     });
+            //     var c = treeWalker.nextNode();
+            //     return {
+            //         node: c? c: root,
+            //         position: c? index:  0
+            //     };
+            // }
+
+            // add cursor data + other users data.
         </script>
     </body>
 </html>
